@@ -17,6 +17,6 @@ for (
 $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path);
 
-$hiraeth->run(function(Handler $handler, Request $request, Emitter $emitter) {
+$hiraeth->exec(function(Handler $handler, Request $request, Emitter $emitter) {
 	return $emitter->emit($handler->handle($request)) ? 0 : 1;
 });
