@@ -17,6 +17,10 @@ for (
 $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path);
 
+if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'])['path'])) {
+	return FALSE;
+}
+
 $hiraeth->exec(function(Handler $handler, Request $request, Emitter $emitter) {
 	return $emitter->emit($handler->handle($request)) ? 0 : 1;
 });
