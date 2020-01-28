@@ -2,7 +2,7 @@
 
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Zend\HttpHandlerRunner\Emitter\SapiEmitter as Emitter;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter as Emitter;
 
 //
 // Track backwards until we discover our composer.json.
