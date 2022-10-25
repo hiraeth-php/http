@@ -14,13 +14,16 @@ for (
 	$root_path  = realpath($root_path . DIRECTORY_SEPARATOR . '..')
 );
 
-$loader  = require $root_path . '/vendor/autoload.php';
-$hiraeth = new Hiraeth\Application($root_path);
+if ($root_path) {
+	$req_path = parse_url($_SERVER['REQUEST_URI'])['path'] ?? '/';
+	$loader   = require $root_path . '/vendor/autoload.php';
+	$hiraeth  = new Hiraeth\Application($root_path);
 
-if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'])['path'])) {
-	return FALSE;
+	if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . $req_path)) {
+		return FALSE;
+	}
+
+	$hiraeth->exec(function(Handler $handler, Request $request, Emitter $emitter) {
+		return $emitter->emit($handler->handle($request)) ? 0 : 1;
+	});
 }
-
-$hiraeth->exec(function(Handler $handler, Request $request, Emitter $emitter) {
-	return $emitter->emit($handler->handle($request)) ? 0 : 1;
-});
