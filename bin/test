@@ -1,3 +1,0 @@
-<?php
-
-passthru(sprintf('%s vendor/bin/phpunit --bootstrap vendor/autoload.php test/cases', PHP_BINARY));

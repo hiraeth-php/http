@@ -1,3 +1,0 @@
-<?php
-
-passthru(sprintf('%s vendor/bin/phpstan -l7 analyse src/', PHP_BINARY));
