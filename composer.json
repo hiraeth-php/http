@@ -22,6 +22,16 @@
         "phpunit/phpunit": "^10.0",
         "hiraeth/diactoros": "^3.0"
     },
+    "autoload": {
+        "classmap": [
+            "src"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "test/src"
+        ]
+    },
     "type": "opus-package",
     "extra": {
         "opus": {
