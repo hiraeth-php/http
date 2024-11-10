@@ -37,6 +37,7 @@
         "opus": {
             "hiraeth/app": {
                 "bin": "",
+                "config": "",
                 "public": ""
             }
         }
