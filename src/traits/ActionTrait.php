@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamFactoryInterface as StreamFactory;
 /**
  *
  */
-trait ManagedTrait
+trait ActionTrait
 {
 	/**
 	 * @var StreamFactory
