@@ -9,13 +9,16 @@ use Hiraeth\Application;
  */
 class ProxyUrlGenerator implements UrlGenerator
 {
+	private readonly string $basePath;
+
 	private readonly UrlGenerator $target;
 
 	/**
 	 *
 	 */
-	public function __construct(private readonly string $basePath, UrlGenerator $target) {
+	public function __construct(private readonly string $base_path, UrlGenerator $target) {
 		$this->target   = $target;
+		$this->basePath = $base_path;
 	}
 
 	/**
