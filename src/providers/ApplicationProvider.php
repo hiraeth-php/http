@@ -28,9 +28,10 @@ class ApplicationProvider implements Hiraeth\Provider
 	public function __invoke($instance, Hiraeth\Application $app): object
 	{
 		$base_path = rtrim($app->getEnvironment('BASE_PATH', ''), '/');
-		$url_path  = parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-		if ($base_path) {
+		if ($base_path && isset($_SERVER['REQUEST_URI'])) {
+			$url_path  = parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
 			if (str_starts_with($url_path, $base_path . '/')) {
 				$_SERVER['REQUEST_URI'] = str_replace(
 					$url_path,
