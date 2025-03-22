@@ -27,11 +27,30 @@ class ApplicationProvider implements Hiraeth\Provider
 	 */
 	public function __invoke($instance, Hiraeth\Application $app): object
 	{
+		$base_path = rtrim($app->getEnvironment('BASE_PATH', ''), '/');
+		$url_path  = parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+		if (str_starts_with($url_path, $base_path)) {
+			$_SERVER['REQUEST_URI'] = str_replace(
+				$url_path,
+				substr($url_path, strlen($base_path)),
+				$_SERVER['REQUEST_URI']
+			);
+		}
+
 		if (!$app->has(UrlGenerator::class)) {
 			$app->get(Hiraeth\Broker::class)->alias(UrlGenerator::class, DefaultUrlGenerator::class);
 		}
 
-		$app->share($app->get(UrlGenerator::class));
+		$broker = $app->get(Hiraeth\Broker::class);
+		$target = $app->get(UrlGenerator::class);
+		$proxy  = $app->get(ProxyUrlGenerator::class, ['base_path' => $base_path]);
+		$class  = $target::class;
+
+		$broker->alias($class, ProxyUrlGenerator::class);
+		$broker->alias(UrlGenerator::class, ProxyUrlGenerator::class);
+
+		$app->share($proxy);
 
 		return $instance;
 	}

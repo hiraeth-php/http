@@ -6,7 +6,7 @@ namespace Hiraeth\Http;
  * Simple and default URL generator
  */
 class DefaultUrlGenerator implements UrlGenerator {
-	public function __invoke($location, array $params = array()): string
+	public function __invoke($location, array $params = []): string
 	{
 		foreach ($params as $name => $value) {
 			$count    = 0;
@@ -23,8 +23,8 @@ class DefaultUrlGenerator implements UrlGenerator {
 		}
 
 		if (count($params)) {
-			$query    = parse_url($location, PHP_URL_QUERY);
-			$fragment = parse_url($location, PHP_URL_FRAGMENT);
+			$query    = parse_url((string) $location, PHP_URL_QUERY);
+			$fragment = parse_url((string) $location, PHP_URL_FRAGMENT);
 			$append   = http_build_query($params);
 
 			if (strlen($query)) {
