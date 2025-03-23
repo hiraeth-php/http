@@ -2,12 +2,25 @@
 
 namespace Hiraeth\Http;
 
+use SplFileInfo;
+use Psr\Http\Message\RequestInterface as Request;
+
 /**
  * Simple and default URL generator
  */
 class DefaultUrlGenerator implements UrlGenerator {
 	public function __invoke($location, array $params = []): string
 	{
+		if ($location instanceof Request) {
+			$params += $location->getQueryParams();
+
+			return $this->call($location->getUri()->getPath(), $params);
+		}
+
+		if ($location instanceof SplFileInfo) {
+			return $this->call($location->getPathName());
+		}
+
 		foreach ($params as $name => $value) {
 			$count    = 0;
 			$location = str_replace(
