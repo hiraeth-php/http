@@ -60,7 +60,7 @@ class DefaultUrlGenerator implements UrlGenerator {
 			}
 		}
 
-		return $location;
+		return (string) $location;
 	}
 
 	public function call(): string

@@ -31,7 +31,7 @@ class ProxyUrlGenerator implements UrlGenerator
 	{
 		$location = $this->target->__invoke(...func_get_args());
 
-		if ($location[0] == '/') {
+		if ($location[0] ?? null == '/') {
 			$location = $this->basePath . $location;
 		}
 
