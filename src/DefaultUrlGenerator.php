@@ -3,22 +3,26 @@
 namespace Hiraeth\Http;
 
 use SplFileInfo;
-use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * Simple and default URL generator
  */
-class DefaultUrlGenerator implements UrlGenerator {
-	public function __invoke($location, array $params = []): string
+class DefaultUrlGenerator implements UrlGenerator
+{
+	/**
+	 * {@inheritDoc}
+	 */
+	public function __invoke(mixed $location, array $params = []): string
 	{
 		if ($location instanceof Request) {
 			$params += $location->getQueryParams();
 
-			return $this->call($location->getUri()->getPath(), $params);
+			return $this($location->getUri()->getPath(), $params);
 		}
 
 		if ($location instanceof SplFileInfo) {
-			return $this->call($location->getPathName());
+			return $this($location->getPathname());
 		}
 
 		foreach ($params as $name => $value) {
@@ -40,14 +44,14 @@ class DefaultUrlGenerator implements UrlGenerator {
 			$fragment = parse_url((string) $location, PHP_URL_FRAGMENT);
 			$append   = http_build_query($params);
 
-			if (strlen($query)) {
+			if (!empty($query)) {
 				$location = str_replace(
 					sprintf('?%s', $query),
 					sprintf('?%s&%s', $query, $append),
 					$location
 				);
 
-			} elseif ($fragment) {
+			} elseif (!empty($fragment)) {
 				$location = str_replace(
 					sprintf('#%s', $fragment),
 					sprintf('?%s#%s', $append, $fragment),
@@ -63,6 +67,9 @@ class DefaultUrlGenerator implements UrlGenerator {
 		return (string) $location;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function call(): string
 	{
 		return $this->__invoke(...func_get_args());
