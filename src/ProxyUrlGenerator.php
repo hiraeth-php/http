@@ -11,14 +11,17 @@ class ProxyUrlGenerator implements UrlGenerator
 {
 	private readonly string $basePath;
 
+	private readonly string $baseRewrite;
+
 	private readonly UrlGenerator $target;
 
 	/**
 	 *
 	 */
-	public function __construct(private readonly string $base_path, UrlGenerator $target) {
-		$this->target   = $target;
-		$this->basePath = $base_path;
+	public function __construct(UrlGenerator $target, string $base_path, bool $base_rewrite) {
+		$this->target      = $target;
+		$this->basePath    = $base_path;
+		$this->baseRewrite = $base_rewrite;
 	}
 
 	/**
@@ -32,7 +35,15 @@ class ProxyUrlGenerator implements UrlGenerator
 		$location = $this->target->__invoke(...func_get_args());
 
 		if ($location[0] ?? null == '/') {
-			$location = $this->basePath . $location;
+			if (str_starts_with($location, $this->basePath . '/')) {
+				if ($this->baseRewrite) {
+					$location = substr($location, strlen($this->basePath));
+				}
+			} else {
+				if ($this->basePath) {
+					$location = $this->basePath . $location;
+				}
+			}
 		}
 
 		return $location;
