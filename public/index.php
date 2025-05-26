@@ -15,7 +15,7 @@ for (
 );
 
 if ($root_path) {
-	$req_path = parse_url($_SERVER['REQUEST_URI'])['path'] ?? '/';
+	$req_path = parse_url($_SERVER['REQUEST_URI'] ?? '')['path'] ?? '/';
 	$loader   = require $root_path . '/vendor/autoload.php';
 	$hiraeth  = new Hiraeth\Application($root_path);
 
